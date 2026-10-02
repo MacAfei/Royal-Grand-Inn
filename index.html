@@ -1,0 +1,2816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Grand Inn • Autonomous AI Hotel Receptionist</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg-base: #07090e;
+      --bg-panel: rgba(15, 20, 32, 0.75);
+      --bg-card: rgba(22, 30, 48, 0.65);
+      --bg-card-hover: rgba(30, 40, 64, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(212, 175, 55, 0.3);
+      --border-glow: rgba(99, 102, 241, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --gold: #d4af37;
+      --gold-light: #fef3c7;
+      --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d4af37 50%, #fef08a 100%);
+      --indigo: #6366f1;
+      --indigo-dark: #4338ca;
+      --indigo-glow: rgba(99, 102, 241, 0.35);
+      --cyan: #06b6d4;
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-luxury: 0 20px 50px -10px rgba(0, 0, 0, 0.6), 0 0 30px -5px rgba(212, 175, 55, 0.15);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      font-family: var(--font-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Lighting Background */
+    .ambient-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.18;
+    }
+
+    .orb-1 {
+      top: -10%;
+      left: 15%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+      animation: floatOrb 24s infinite alternate ease-in-out;
+    }
+
+    .orb-2 {
+      bottom: -15%;
+      right: 10%;
+      width: 45vw;
+      height: 45vw;
+      background: radial-gradient(circle, var(--indigo) 0%, transparent 70%);
+      animation: floatOrb 28s infinite alternate-reverse ease-in-out;
+    }
+
+    .orb-3 {
+      top: 35%;
+      right: 35%;
+      width: 35vw;
+      height: 35vw;
+      background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+      opacity: 0.1;
+      animation: floatOrb 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(4%, 6%) scale(1.08);
+      }
+
+      100% {
+        transform: translate(-4%, -3%) scale(0.95);
+      }
+    }
+
+    /* Header */
+    .top-header {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 36px;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--gold-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      color: #07090e;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #ffffff 30%, #e2e8f0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stars-badge {
+      color: #f59e0b;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-subtitle .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .badge-autonomous {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: #34d399;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseGreen 2s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+
+      70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 7px rgba(16, 185, 129, 0);
+      }
+
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .btn-action:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .btn-action.primary {
+      background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+      border-color: rgba(99, 102, 241, 0.5);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-action.primary:hover {
+      background: linear-gradient(135deg, #7175f3 0%, #4f46e5 100%);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-action.gold {
+      background: var(--gold-gradient);
+      border: none;
+      color: #0a0d14;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-action.gold:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+    }
+
+    .lang-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .lang-select option {
+      background: #0f1420;
+      color: #fff;
+    }
+
+    /* Main Container */
+    .app-main {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 24px;
+      padding: 24px 36px 36px 36px;
+      flex: 1;
+      max-width: 1700px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    @media (max-width: 1100px) {
+      .app-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Stage: Receptionist Kiosk */
+    .receptionist-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: calc(100vh - 140px);
+    }
+
+    /* Sophia Avatar Card */
+    .avatar-card {
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: var(--shadow-luxury);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .avatar-frame {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      flex-shrink: 0;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      transition: var(--transition);
+    }
+
+    .avatar-ring {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      right: -6px;
+      bottom: -6px;
+      border-radius: 50%;
+      border: 2px dashed rgba(212, 175, 55, 0.4);
+      animation: rotateRing 20s linear infinite;
+    }
+
+    @keyframes rotateRing {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .avatar-frame.speaking .avatar-ring {
+      border-color: var(--cyan);
+      animation: rotateRing 4s linear infinite;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+    }
+
+    .avatar-frame.listening .avatar-ring {
+      border-color: var(--rose);
+      animation: pulseRedRing 1.2s infinite;
+    }
+
+    @keyframes pulseRedRing {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(244, 63, 94, 0.6);
+      }
+
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 20px rgba(244, 63, 94, 0.8);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(244, 63, 94, 0.6);
+      }
+    }
+
+    .avatar-info {
+      flex: 1;
+    }
+
+    .avatar-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .avatar-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .avatar-tag {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--gold-light);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .avatar-status-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #38bdf8;
+      font-weight: 500;
+    }
+
+    /* Audio Waveform */
+    .waveform-visualizer {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 28px;
+      padding: 0 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .wave-bar {
+      width: 3px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+
+    .waveform-visualizer.active .wave-bar:nth-child(1) {
+      animation: waveAnim 0.7s infinite ease-in-out;
+    }
+
+    .waveform-visualizer.active .wave-bar:nth-child(2) {
+      animation: waveAnim 0.5s infinite 0.15s ease-in-out;
+    }
+
+    .waveform-visualizer.active .wave-bar:nth-child(3) {
+      animation: waveAnim 0.9s infinite 0.3s ease-in-out;
+    }
+
+    .waveform-visualizer.active .wave-bar:nth-child(4) {
+      animation: waveAnim 0.6s infinite 0.1s ease-in-out;
+    }
+
+    .waveform-visualizer.active .wave-bar:nth-child(5) {
+      animation: waveAnim 0.8s infinite 0.25s ease-in-out;
+    }
+
+    @keyframes waveAnim {
+
+      0%,
+      100% {
+        height: 4px;
+        background: var(--indigo);
+      }
+
+      50% {
+        height: 22px;
+        background: var(--cyan);
+      }
+    }
+
+    /* Scenario Quick Chips */
+    .scenario-chips-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .scenario-chips-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .chip:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      border-color: rgba(212, 175, 55, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .chip i {
+      color: var(--gold);
+    }
+
+    /* Chat Messages Box */
+    .chat-box {
+      flex: 1;
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: var(--shadow-luxury);
+      min-height: 480px;
+    }
+
+    .chat-history {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-history::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-history::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 82%;
+      animation: fadeInMsg 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInMsg {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg-row.assistant {
+      align-self: flex-start;
+    }
+
+    .msg-row.user {
+      align-self: flex-end;
+    }
+
+    .msg-sender {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .msg-row.user .msg-sender {
+      justify-content: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .msg-row.assistant .msg-bubble {
+      background: rgba(28, 38, 60, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+      border-top-left-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .msg-row.user .msg-bubble {
+      background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+      color: #ffffff;
+      border-top-right-radius: 4px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .msg-bubble strong {
+      color: #fef08a;
+      font-weight: 600;
+    }
+
+    /* Typing Indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 18px;
+      background: rgba(28, 38, 60, 0.85);
+      border-radius: 18px;
+      border-top-left-radius: 4px;
+      width: fit-content;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typingBounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+        opacity: 0.4;
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Interactive UI Widgets in Chat */
+    .widget-container {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    /* 1. Digital NFC Keycard */
+    .keycard-pass {
+      background: linear-gradient(145deg, #1e1b2e 0%, #111424 50%, #0c0e18 100%);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.2);
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .keycard-pass::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .keycard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .keycard-hotel-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .keycard-chip-icon {
+      width: 38px;
+      height: 28px;
+      background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+      border-radius: 4px;
+      border: 1px solid #fef08a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .keycard-chip-lines {
+      width: 26px;
+      height: 18px;
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      border-radius: 2px;
+    }
+
+    .keycard-main-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .keycard-room-giant {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      line-height: 1;
+    }
+
+    .keycard-room-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .keycard-guest-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-top: 6px;
+    }
+
+    .keycard-qr-box {
+      width: 72px;
+      height: 72px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .keycard-qr-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .keycard-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-key-unlock {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, #b45309 100%);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+      font-size: 13px;
+    }
+
+    .btn-key-unlock:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+
+    /* 2. Folio / Bill Receipt */
+    .folio-receipt {
+      background: #0f172a;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #e2e8f0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .folio-header {
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .folio-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .folio-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .folio-line.total {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 8px;
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #34d399;
+    }
+
+    .paid-stamp {
+      display: inline-block;
+      margin-top: 12px;
+      border: 2px solid #10b981;
+      color: #10b981;
+      padding: 4px 14px;
+      border-radius: 4px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      transform: rotate(-3deg);
+    }
+
+    /* 3. Service Ticket Progress */
+    .service-ticket-widget {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: var(--transition);
+    }
+
+    .service-ticket-widget.rush {
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 4px 25px rgba(245, 158, 11, 0.25);
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .ticket-title {
+      font-weight: 600;
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 12px 0 8px 0;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--indigo) 0%, var(--cyan) 100%);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+
+    .progress-fill.rush-fill {
+      background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%);
+    }
+
+    .ticket-steps {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .ticket-step.active {
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    /* 4. Room Service Menu Card Widget */
+    .menu-card-widget {
+      background: linear-gradient(145deg, #131b2e 0%, #0d1220 100%);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .menu-header-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .menu-hours {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .menu-items-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .menu-items-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .menu-items-grid::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 2px;
+    }
+
+    .menu-item-tile {
+      background: rgba(22, 30, 48, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: var(--transition);
+    }
+
+    .menu-item-tile:hover {
+      border-color: rgba(212, 175, 55, 0.3);
+      background: rgba(30, 42, 68, 0.85);
+    }
+
+    .item-header-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .item-price {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .item-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .btn-order-dish {
+      align-self: flex-start;
+      margin-top: 4px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition);
+    }
+
+    .btn-order-dish:hover {
+      background: var(--indigo);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-rush-order {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+    }
+
+    .btn-rush-order:hover {
+      background: var(--amber);
+      color: #000;
+    }
+
+    /* Chat Footer & Voice Input */
+    .chat-footer {
+      padding: 16px 20px;
+      background: rgba(11, 15, 24, 0.9);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(20, 27, 44, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 14px 20px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .chat-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .mic-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .mic-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--indigo);
+      color: var(--indigo);
+      transform: scale(1.05);
+    }
+
+    .mic-btn.listening {
+      background: var(--rose);
+      color: #fff;
+      border-color: var(--rose);
+      animation: micPulse 1.2s infinite;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.6);
+    }
+
+    @keyframes micPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.12);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .send-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gold-gradient);
+      border: none;
+      color: #07090e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover {
+      filter: brightness(1.15);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .footer-toggles {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 0 6px;
+    }
+
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #1e293b;
+      transition: .3s;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #94a3b8;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--indigo);
+      border-color: var(--indigo);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(16px);
+      background-color: #ffffff;
+    }
+
+    /* Right Panel: Hotel PMS & Operations */
+    .pms-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* KPI Metrics Cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .kpi-card.indigo::before {
+      background: var(--indigo);
+    }
+
+    .kpi-card.emerald::before {
+      background: var(--emerald);
+    }
+
+    .kpi-card.cyan::before {
+      background: var(--cyan);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* PMS Tabs */
+    .pms-tab-bar {
+      display: flex;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .pms-tab {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pms-tab:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .pms-tab.active {
+      background: var(--bg-card);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* PMS Content Area */
+    .pms-content-box {
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      flex: 1;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-luxury);
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* Room Rack Grid */
+    .floor-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .floor-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .floor-title .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .room-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .room-tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .room-tile.available {
+      border-top: 3px solid var(--emerald);
+    }
+
+    .room-tile.occupied {
+      border-top: 3px solid var(--indigo);
+    }
+
+    .room-tile.cleaning {
+      border-top: 3px solid var(--amber);
+    }
+
+    .room-tile.reserved {
+      border-top: 3px solid var(--gold);
+    }
+
+    .room-num-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .room-num {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .status-badge {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+    }
+
+    .status-badge.available {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+
+    .status-badge.occupied {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+    }
+
+    .status-badge.cleaning {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+
+    .status-badge.reserved {
+      background: rgba(212, 175, 55, 0.2);
+      color: #fde047;
+    }
+
+    .room-guest {
+      font-size: 11px;
+      color: #cbd5e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .room-type-tag {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    /* Service Dispatch Board */
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .service-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-card-hover);
+    }
+
+    .service-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .service-room-badge {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Guest Roster Table */
+    .roster-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .roster-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .roster-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .roster-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .roster-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Live Autonomous Activity Ticker */
+    .activity-ticker {
+      background: rgba(15, 20, 32, 0.6);
+      border-top: 1px solid var(--border-subtle);
+      padding: 10px 36px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      z-index: 20;
+    }
+
+    .ticker-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ticker-content {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: #cbd5e1;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    /* Modal / Popups */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #0f1422;
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Ambient Luxury Glow -->
+  <div class="ambient-glow">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header class="top-header">
+    <div class="brand-wrap">
+      <div class="brand-logo-icon">
+        <i data-lucide="crown" style="width: 24px; height: 24px;"></i>
+      </div>
+      <div>
+        <div class="brand-title">
+          Royal Grand Inn
+          <span class="stars-badge">★★★★★</span>
+        </div>
+        <div class="brand-subtitle">
+          <span>Miami Beach Ocean Resort</span>
+          <span class="dot"></span>
+          <span>100% Autonomous AI Front Desk</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <div class="badge-autonomous">
+        <div class="pulse-dot"></div>
+        <span>AUTONOMOUS KIOSK ONLINE</span>
+      </div>
+
+      <button class="btn-action primary" onclick="startAutopilotTour()" id="btn-autopilot"
+        title="Watch the AI receptionist operate completely by itself">
+        <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+        <span>Run Autopilot Demo</span>
+      </button>
+
+      <button class="btn-action" onclick="resetHotelDatabase()" title="Reset hotel PMS database">
+        <i data-lucide="rotate-ccw" style="width: 15px; height: 15px;"></i>
+        <span>Reset Data</span>
+      </button>
+
+      <select class="lang-select" id="lang-select" onchange="changeLanguage()">
+        <option value="en">🇺🇸 English</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="de">🇩🇪 Deutsch</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-main">
+
+    <!-- LEFT COLUMN: The Autonomous Receptionist Kiosk -->
+    <section class="receptionist-stage">
+
+      <!-- Sophia Receptionist Card -->
+      <div class="avatar-card">
+        <div class="avatar-frame" id="avatar-frame">
+          <div class="avatar-ring"></div>
+          <img src="/static/sophia_avatar.jpg" alt="Sophia AI Receptionist" class="avatar-img"
+            onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300'" />
+        </div>
+
+        <div class="avatar-info">
+          <div class="avatar-meta">
+            <h1 class="avatar-name">Sophia</h1>
+            <span class="avatar-tag">Autonomous Front Desk Agent</span>
+          </div>
+          <div class="avatar-status-text">
+            <span class="avatar-status-pill" id="agent-status-label">
+              <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i>
+              Ready to assist guests
+            </span>
+          </div>
+        </div>
+
+        <div class="waveform-visualizer" id="wave-vis" title="Audio Waveform Activity">
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+          <div class="wave-bar"></div>
+        </div>
+      </div>
+
+      <!-- Quick Scenario Chips -->
+      <div class="scenario-chips-row">
+        <button class="chip" onclick="sendQuickPrompt('Check in David Miller')">
+          <i data-lucide="key" style="width: 14px; height: 14px;"></i>
+          Check In David Miller
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('Can I get breakfast for room 202?')"
+          style="border-color: rgba(212, 175, 55, 0.4);">
+          <i data-lucide="utensils" style="width: 14px; height: 14px; color: var(--gold);"></i>
+          In-Room Breakfast Menu
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('Is it possible to make it a bit earlier like within 5 minutes?')"
+          style="border-color: rgba(245, 158, 11, 0.4);">
+          <i data-lucide="zap" style="width: 14px; height: 14px; color: #f59e0b;"></i>
+          Expedite Order (5 mins)
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('Book an Executive Suite for Sarah from tomorrow for 2 nights')">
+          <i data-lucide="calendar-plus" style="width: 14px; height: 14px;"></i>
+          Reserve Executive Suite
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('Please send extra towels and bathrobes to Room 301')">
+          <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+          Extra Towels to Room 301
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('What time does the infinity pool and spa open?')">
+          <i data-lucide="waves" style="width: 14px; height: 14px;"></i>
+          Pool & Spa Hours
+        </button>
+        <button class="chip" onclick="sendQuickPrompt('I am ready to check out of Room 204')">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+          Check Out Room 204
+        </button>
+      </div>
+
+      <!-- Chat & Conversation Window -->
+      <div class="chat-box">
+        <div class="chat-history" id="chat-history">
+          <!-- Initial Welcome Message from Sophia -->
+          <div class="msg-row assistant">
+            <div class="msg-sender">
+              <i data-lucide="bot" style="width: 12px; height: 12px; color: var(--gold);"></i>
+              Sophia • Autonomous Front Desk
+            </div>
+            <div class="msg-bubble" id="welcome-text">
+              Welcome to <strong>Royal Grand Inn</strong>, Miami Beach! I am <strong>Sophia</strong>, your 100%
+              autonomous AI Front Desk Concierge.
+              <br><br>
+              I operate completely on my own to manage your stay. How may I assist you today?
+              <br>
+              • <strong>Check-In</strong>: Say <em>"Check in David Miller"</em> to generate your NFC keycard.
+              <br>
+              • <strong>Reservations</strong>: Ask <em>"Book a Suite for 2 nights"</em>.
+              <br>
+              • <strong>Guest Services</strong>: Request extra towels, housekeeping, or room service dining.
+              <br>
+              • <strong>Express Check-Out</strong>: Settle folio and release room automatically.
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Footer -->
+        <div class="chat-footer">
+          <div class="input-bar-wrap">
+            <input type="text" class="chat-input" id="chat-input"
+              placeholder="Speak or type your request (e.g. 'Check in David Miller')..."
+              onkeydown="if(event.key==='Enter') handleUserSend()" />
+            <button class="mic-btn" id="mic-btn" onclick="toggleSpeech()" title="Speak with Sophia (Voice Recognition)">
+              <i data-lucide="mic" style="width: 20px; height: 20px;"></i>
+            </button>
+            <button class="send-btn" onclick="handleUserSend()" id="send-btn" title="Send message">
+              <i data-lucide="arrow-up" style="width: 20px; height: 20px;"></i>
+            </button>
+          </div>
+
+          <div class="footer-toggles">
+            <div class="toggle-group">
+              <label class="switch">
+                <input type="checkbox" id="tts-toggle" checked />
+                <span class="slider"></span>
+              </label>
+              <span>Voice Speech Output</span>
+            </div>
+
+            <div class="toggle-group">
+              <label class="switch">
+                <input type="checkbox" id="handsfree-toggle" onchange="toggleHandsFree()" />
+                <span class="slider"></span>
+              </label>
+              <span style="color: var(--indigo); font-weight: 600;">Hands-Free Kiosk Mode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: Hotel PMS & Operations Panel -->
+    <aside class="pms-panel">
+
+      <!-- Top KPI Row -->
+      <div class="kpi-row">
+        <div class="kpi-card emerald">
+          <span class="kpi-label">Occupancy</span>
+          <span class="kpi-value" id="kpi-occupancy">58%</span>
+          <span class="kpi-sub" id="kpi-rooms-ratio">7 / 12 Rooms</span>
+        </div>
+        <div class="kpi-card indigo">
+          <span class="kpi-label">In-House Guests</span>
+          <span class="kpi-value" id="kpi-guests">3</span>
+          <span class="kpi-sub">Checked-In</span>
+        </div>
+        <div class="kpi-card cyan">
+          <span class="kpi-label">Service Queue</span>
+          <span class="kpi-value" id="kpi-services">2</span>
+          <span class="kpi-sub">Active Tickets</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Total Revenue</span>
+          <span class="kpi-value" id="kpi-revenue">$3,840</span>
+          <span class="kpi-sub">Bookings Value</span>
+        </div>
+      </div>
+
+      <!-- PMS Tab Bar -->
+      <div class="pms-tab-bar">
+        <button class="pms-tab active" onclick="switchPmsTab('tab-rooms', this)">
+          <i data-lucide="grid" style="width: 14px; height: 14px;"></i>
+          <span>Room Rack</span>
+        </button>
+        <button class="pms-tab" onclick="switchPmsTab('tab-services', this)">
+          <i data-lucide="bell" style="width: 14px; height: 14px;"></i>
+          <span>Dispatch Queue</span>
+        </button>
+        <button class="pms-tab" onclick="switchPmsTab('tab-guests', this)">
+          <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+          <span>Guest Roster</span>
+        </button>
+        <button class="pms-tab" onclick="switchPmsTab('tab-directory', this)">
+          <i data-lucide="compass" style="width: 14px; height: 14px;"></i>
+          <span>Directory</span>
+        </button>
+      </div>
+
+      <!-- PMS Content Container -->
+      <div class="pms-content-box">
+
+        <!-- TAB 1: Room Rack Grid -->
+        <div class="tab-content active" id="tab-rooms">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 15px; font-weight: 700; color: #fff;">Live Floor Status Map</h3>
+            <div style="display: flex; gap: 8px; font-size: 11px;">
+              <span style="color: #34d399;">● Available</span>
+              <span style="color: #818cf8;">● Occupied</span>
+              <span style="color: #fbbf24;">● Cleaning</span>
+            </div>
+          </div>
+
+          <!-- Floor 15: Penthouse -->
+          <div class="floor-group">
+            <div class="floor-title">
+              <span>Floor 15 • Presidential Penthouses</span>
+              <div class="line"></div>
+            </div>
+            <div class="room-grid" id="floor-15-grid"></div>
+          </div>
+
+          <!-- Floor 3: Suites -->
+          <div class="floor-group">
+            <div class="floor-title">
+              <span>Floor 3 • Executive Suites</span>
+              <div class="line"></div>
+            </div>
+            <div class="room-grid" id="floor-3-grid"></div>
+          </div>
+
+          <!-- Floor 2: Deluxe -->
+          <div class="floor-group">
+            <div class="floor-title">
+              <span>Floor 2 • Deluxe Ocean Balcony</span>
+              <div class="line"></div>
+            </div>
+            <div class="room-grid" id="floor-2-grid"></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Service Dispatch Queue -->
+        <div class="tab-content" id="tab-services">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <h3 style="font-size: 15px; font-weight: 700; color: #fff;">Autonomous Dispatch Queue</h3>
+            <span style="font-size: 11px; color: var(--text-muted);">Real-time Staff/Bot Tracking</span>
+          </div>
+          <div id="services-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+
+        <!-- TAB 3: Guest Roster & Bookings -->
+        <div class="tab-content" id="tab-guests">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <h3 style="font-size: 15px; font-weight: 700; color: #fff;">Guest PMS Roster</h3>
+            <span style="font-size: 11px; color: var(--text-muted);" id="roster-count">4 Bookings</span>
+          </div>
+          <div id="roster-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
+
+        <!-- TAB 4: Hotel Concierge Directory -->
+        <div class="tab-content" id="tab-directory">
+          <h3 style="font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px;">Hotel Directory & Amenities
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+            <div class="service-card">
+              <div style="font-weight: 700; color: var(--gold);">🌊 Infinity Pool (3rd Floor Terrace)</div>
+              <div style="color: var(--text-muted);">Hours: 7:00 AM – 10:00 PM. Heated outdoor pool with panoramic ocean
+                sunset views and towel service.</div>
+            </div>
+            <div class="service-card">
+              <div style="font-weight: 700; color: var(--gold);">✨ Grand Spa & Wellness (2nd Floor)</div>
+              <div style="color: var(--text-muted);">Hours: 9:00 AM – 8:00 PM. Saunas, massages, facials. Dial ext. 505
+                for reservations.</div>
+            </div>
+            <div class="service-card">
+              <div style="font-weight: 700; color: var(--gold);">🍽️ Ocean Breeze Grill (Lobby Level)</div>
+              <div style="color: var(--text-muted);">Breakfast: 6:30 – 10:30 AM | Lunch: 12:00 – 3:00 PM | Dinner: 6:00
+                – 10:00 PM. 24/7 Room service available.</div>
+            </div>
+            <div class="service-card">
+              <div style="font-weight: 700; color: var(--gold);">🚗 Valet Parking & EV Charging</div>
+              <div style="color: var(--text-muted);">$30/night with 24/7 unlimited in-and-out privileges and Tesla
+                Supercharging.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Bottom Live Activity Ticker -->
+  <footer class="activity-ticker">
+    <div class="ticker-label">
+      <i data-lucide="radio" style="width: 14px; height: 14px; color: var(--gold);"></i>
+      <span>Autonomous Hotel PMS Ticker</span>
+    </div>
+    <div class="ticker-content" id="ticker-text">
+      System nominal • Autonomous agent Sophia monitoring Lobby Kiosk • Floor 2-15 PMS online
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Global State
+    let conversationHistory = [];
+    let isListening = false;
+    let isHandsFree = false;
+    let recognition = null;
+    let autopilotRunning = false;
+    let audioContext = null;
+
+    // Web Audio Synthesizer for 5-Star Hotel Chime
+    function playHotelChime() {
+      try {
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        const now = audioContext.currentTime;
+        const osc1 = audioContext.createOscillator();
+        const osc2 = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc1.type = "sine";
+        osc1.frequency.setValueAtTime(587.33, now); // D5
+        osc1.frequency.exponentialRampToValueAtTime(880.00, now + 0.15); // A5
+
+        osc2.type = "triangle";
+        osc2.frequency.setValueAtTime(880.00, now + 0.15);
+        osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.35); // D6
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc1.start(now);
+        osc2.start(now + 0.15);
+        osc1.stop(now + 0.5);
+        osc2.stop(now + 0.8);
+      } catch (e) {
+        console.log("Audio chime error:", e);
+      }
+    }
+
+    // Door Unlock Chime
+    function playDoorUnlockSound() {
+      try {
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const now = audioContext.currentTime;
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.setValueAtTime(1600, now + 0.12);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) { }
+    }
+
+    // Fetch Initial State on load
+    window.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      fetchState();
+      // Autonomous background simulator tick every 10 seconds
+      setInterval(runAutopilotTick, 10000);
+    });
+
+    async function fetchState() {
+      try {
+        const res = await fetch("/state");
+        const data = await res.json();
+        updatePmsUI(data);
+      } catch (e) {
+        console.error("Error fetching hotel state:", e);
+      }
+    }
+
+    async function resetHotelDatabase() {
+      if (confirm("Reset hotel PMS database back to initial sample state?")) {
+        try {
+          const res = await fetch("/reset", { method: "POST" });
+          const data = await res.json();
+          updatePmsUI(data);
+          addAssistantMessage("Database reset successfully. Sample guests and rooms restored.");
+          setTicker("Hotel PMS database reset to default 5-star resort state.");
+        } catch (e) {
+          console.error("Error resetting database:", e);
+        }
+      }
+    }
+
+    function setTicker(text) {
+      const el = document.getElementById("ticker-text");
+      if (el) el.textContent = text;
+    }
+
+    // Tab Switching
+    function switchPmsTab(tabId, tabButton) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".pms-tab").forEach(el => el.classList.remove("active"));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add("active");
+      if (tabButton) tabButton.classList.add("active");
+      lucide.createIcons();
+    }
+
+    // Update Room Rack & PMS Lists
+    function updatePmsUI(data) {
+      if (!data) return;
+      const { rooms, bookings, service_requests, stats } = data;
+
+      // Update KPIs
+      if (stats) {
+        document.getElementById("kpi-occupancy").textContent = stats.occupancy_pct + "%";
+        document.getElementById("kpi-rooms-ratio").textContent = `${stats.occupied_rooms} / ${stats.total_rooms} Rooms`;
+        document.getElementById("kpi-guests").textContent = stats.in_house_guests;
+        document.getElementById("kpi-services").textContent = stats.pending_services;
+        document.getElementById("kpi-revenue").textContent = "$" + stats.total_revenue.toLocaleString();
+      }
+
+      // Render Rooms
+      if (rooms) {
+        renderRoomGrid("floor-15-grid", rooms.filter(r => r.floor === 15));
+        renderRoomGrid("floor-3-grid", rooms.filter(r => r.floor === 3));
+        renderRoomGrid("floor-2-grid", rooms.filter(r => r.floor === 2));
+      }
+
+      // Render Service Requests
+      if (service_requests) {
+        renderServices(service_requests);
+      }
+
+      // Render Guest Roster
+      if (bookings) {
+        renderRoster(bookings);
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderRoomGrid(containerId, roomsList) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = "";
+
+      roomsList.forEach(room => {
+        const tile = document.createElement("div");
+        tile.className = `room-tile ${room.status}`;
+        tile.title = `Click to inspect Room ${room.room_number}`;
+        tile.onclick = () => inspectRoom(room);
+
+        tile.innerHTML = `
+          <div class="room-num-row">
+            <span class="room-num">${room.room_number}</span>
+            <span class="status-badge ${room.status}">${room.status}</span>
+          </div>
+          <div class="room-guest">${room.current_guest || (room.status === 'cleaning' ? 'Sanitizing' : 'Vacant')}</div>
+          <div class="room-type-tag">${room.cleanliness === 'in_progress' ? '🧹 Housekeeping' : 'Clean & Inspected'}</div>
+        `;
+        container.appendChild(tile);
+      });
+    }
+
+    function inspectRoom(room) {
+      if (room.status === "cleaning") {
+        if (confirm(`Room ${room.room_number} is currently being cleaned. Mark clean and ready now?`)) {
+          fetch("/room/clean", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ room_number: room.room_number })
+          }).then(res => res.json()).then(data => {
+            fetchState();
+            setTicker(`Room ${room.room_number} sanitized and ready for guest arrival.`);
+          });
+        }
+      } else if (room.status === "occupied") {
+        sendQuickPrompt(`Check out Room ${room.room_number}`);
+      } else if (room.status === "reserved") {
+        sendQuickPrompt(`Check in ${room.current_guest || room.room_number}`);
+      } else {
+        sendQuickPrompt(`Book Room ${room.room_number} for 2 nights`);
+      }
+    }
+
+    function renderServices(services) {
+      const container = document.getElementById("services-list-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (services.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-dim); text-align: center; padding: 24px;">No active service requests. Speak to Sophia to request amenities.</div>`;
+        return;
+      }
+
+      services.forEach(srv => {
+        const card = document.createElement("div");
+        card.className = "service-card";
+        const isDone = srv.status === "Completed";
+
+        card.innerHTML = `
+          <div class="service-card-top">
+            <div style="font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px;">
+              <span class="service-room-badge">Room ${srv.room_number}</span>
+              <span>${srv.service_type}</span>
+            </div>
+            <span class="status-badge ${isDone ? 'available' : 'cleaning'}">${srv.status}</span>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">${srv.details}</div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+            <span>Runner: <strong style="color: var(--gold);">${srv.assigned_to || 'Bot Alpha'}</strong></span>
+            <span>${srv.timestamp || 'Just now'}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderRoster(bookings) {
+      const container = document.getElementById("roster-list-container");
+      const countEl = document.getElementById("roster-count");
+      if (!container) return;
+      container.innerHTML = "";
+      if (countEl) countEl.textContent = `${bookings.length} Bookings`;
+
+      bookings.forEach(b => {
+        const card = document.createElement("div");
+        card.className = "roster-card";
+        const isInHouse = b.status === "Checked-In";
+        const isConfirmed = b.status === "Confirmed";
+
+        card.innerHTML = `
+          <div class="roster-info">
+            <div class="roster-name">${b.guest_name}</div>
+            <div class="roster-sub">
+              Room <strong>${b.room_number}</strong> (${b.room_name}) • ${b.checkin_date} to ${b.checkout_date}
+            </div>
+            <div style="font-size: 11px; color: ${isInHouse ? '#34d399' : (isConfirmed ? '#fde047' : '#94a3b8')}; font-weight: 600;">
+              Status: ${b.status} • Total: $${b.total_price}
+            </div>
+          </div>
+          <div class="roster-actions">
+            ${isConfirmed ? `
+              <button class="btn-action primary" style="padding: 6px 10px; font-size: 11px;" onclick="sendQuickPrompt('Check in ${b.guest_name}')">
+                Check In
+              </button>` : ''}
+            ${isInHouse ? `
+              <button class="btn-action" style="padding: 6px 10px; font-size: 11px; color: #f43f5e;" onclick="sendQuickPrompt('Check out Room ${b.room_number}')">
+                Check Out
+              </button>` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Chat Logic
+    function sendQuickPrompt(promptText) {
+      document.getElementById("chat-input").value = promptText;
+      handleUserSend();
+    }
+
+    async function handleUserSend() {
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = "";
+      addUserMessage(text);
+      conversationHistory.push({ role: "user", content: text });
+
+      showTypingIndicator();
+      setAvatarState("thinking");
+
+      try {
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: text,
+            history: conversationHistory.slice(-6)
+          })
+        });
+
+        const data = await res.json();
+        hideTypingIndicator();
+
+        const answer = data.answer || "I am processing your request.";
+        conversationHistory.push({ role: "assistant", content: answer });
+
+        addAssistantMessage(answer, data.widget);
+        updatePmsUI(data);
+
+        // Voice output
+        if (document.getElementById("tts-toggle").checked) {
+          speakResponse(answer);
+        } else {
+          setAvatarState("idle");
+        }
+
+        // Ticker update
+        setTicker(`Autonomous action: ${text.slice(0, 40)}... completed.`);
+        playHotelChime();
+
+      } catch (err) {
+        hideTypingIndicator();
+        setAvatarState("idle");
+        addAssistantMessage("I encountered a connection error. Let me assist you directly: Royal Grand Inn front desk is active.");
+      }
+    }
+
+    function addUserMessage(text) {
+      const container = document.getElementById("chat-history");
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      row.innerHTML = `
+        <div class="msg-sender">Guest</div>
+        <div class="msg-bubble">${escapeHtml(text)}</div>
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function addAssistantMessage(text, widget = null) {
+      const container = document.getElementById("chat-history");
+      const row = document.createElement("div");
+      row.className = "msg-row assistant";
+
+      let widgetHtml = "";
+      if (widget) {
+        widgetHtml = renderWidgetHtml(widget);
+      }
+
+      row.innerHTML = `
+        <div class="msg-sender">
+          <i data-lucide="bot" style="width: 12px; height: 12px; color: var(--gold);"></i>
+          Sophia • Autonomous Front Desk
+        </div>
+        <div class="msg-bubble">${formatMarkdown(text)}</div>
+        ${widgetHtml ? `<div class="widget-container">${widgetHtml}</div>` : ''}
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function renderWidgetHtml(widget) {
+      if (widget.type === "keycard") {
+        return `
+          <div class="keycard-pass">
+            <div class="keycard-header">
+              <div class="keycard-hotel-brand">
+                <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+                ROYAL GRAND INN • DIGITAL KEY
+              </div>
+              <div class="keycard-chip-icon">
+                <div class="keycard-chip-lines"></div>
+              </div>
+            </div>
+
+            <div class="keycard-main-grid">
+              <div>
+                <div class="keycard-room-label">Room Number</div>
+                <div class="keycard-room-giant">${widget.room_number}</div>
+                <div class="keycard-guest-name">${widget.guest_name}</div>
+                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">Floor ${widget.floor} • ${widget.room_name}</div>
+              </div>
+
+              <div class="keycard-qr-box" title="Scan or tap at elevator/door reader">
+                <!-- High tech SVG QR pattern -->
+                <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                  <rect width="100" height="100" fill="#ffffff" />
+                  <rect x="10" y="10" width="25" height="25" fill="#000000" />
+                  <rect x="15" y="15" width="15" height="15" fill="#ffffff" />
+                  <rect x="18" y="18" width="9" height="9" fill="#000000" />
+                  <rect x="65" y="10" width="25" height="25" fill="#000000" />
+                  <rect x="70" y="15" width="15" height="15" fill="#ffffff" />
+                  <rect x="73" y="18" width="9" height="9" fill="#000000" />
+                  <rect x="10" y="65" width="25" height="25" fill="#000000" />
+                  <rect x="15" y="70" width="15" height="15" fill="#ffffff" />
+                  <rect x="18" y="73" width="9" height="9" fill="#000000" />
+                  <rect x="42" y="15" width="10" height="8" fill="#000000" />
+                  <rect x="42" y="35" width="16" height="12" fill="#000000" />
+                  <rect x="65" y="45" width="12" height="12" fill="#000000" />
+                  <rect x="45" y="65" width="18" height="10" fill="#000000" />
+                  <rect x="75" y="75" width="15" height="15" fill="#000000" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="keycard-footer">
+              <span>Wi-Fi: <strong style="color: #fff;">${widget.wifi_network}</strong></span>
+              <span>Pass: <strong style="color: var(--gold);">${widget.wifi_pass}</strong></span>
+              <span>Check-Out: ${widget.checkout_date} (${widget.checkout_time})</span>
+            </div>
+
+            <button class="btn-key-unlock" onclick="unlockDoorSimulation('${widget.room_number}')">
+              <i data-lucide="radio" style="width: 16px; height: 16px;"></i>
+              Tap to Unlock Room Door (NFC Pass)
+            </button>
+          </div>
+        `;
+      } else if (widget.type === "folio") {
+        return `
+          <div class="folio-receipt">
+            <div class="folio-header">
+              <div class="folio-title">ROYAL GRAND INN • MIAMI BEACH</div>
+              <div>Official Guest Folio Receipt #${widget.folio_id}</div>
+              <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">123 Ocean Drive, Miami Beach, FL 33139</div>
+            </div>
+
+            <div class="folio-line"><span>Guest Name:</span><span>${widget.guest_name}</span></div>
+            <div class="folio-line"><span>Room / Suite:</span><span>Room ${widget.room_number} (${widget.nights} nights)</span></div>
+            <div class="folio-line"><span>Dates of Stay:</span><span>${widget.checkin_date} to ${widget.checkout_date}</span></div>
+            <div class="folio-line"><span>Room Charges:</span><span>$${widget.room_charge.toFixed(2)}</span></div>
+            <div class="folio-line"><span>Resort Fee ($35/night):</span><span>$${widget.resort_fee.toFixed(2)}</span></div>
+            <div class="folio-line"><span>Dining & Room Service:</span><span>$${widget.incidentals.toFixed(2)}</span></div>
+            <div class="folio-line"><span>Florida & Tourism Tax (13%):</span><span>$${widget.taxes.toFixed(2)}</span></div>
+
+            <div class="folio-line total">
+              <span>Grand Total Settled:</span>
+              <span>$${widget.grand_total.toFixed(2)}</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+              <span class="paid-stamp">PAID IN FULL</span>
+              <span style="font-size: 11px; color: var(--text-muted);">${widget.payment_method}</span>
+            </div>
+          </div>
+        `;
+      } else if (widget.type === "menu_card") {
+        return `
+          <div class="menu-card-widget">
+            <div class="menu-card-header">
+              <div class="menu-header-title">
+                <i data-lucide="utensils" style="width: 18px; height: 18px; color: var(--gold);"></i>
+                ${widget.category_title || "Artisanal In-Room Dining Menu"}
+              </div>
+              <span class="status-badge available">Kitchen Open</span>
+            </div>
+            <div class="menu-hours">${widget.hours || "Freshly prepared to order by Chef Marco"}</div>
+
+            <div class="menu-items-grid">
+              ${(widget.items || []).map(item => `
+                <div class="menu-item-tile">
+                  <div class="item-header-line">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-price">$${item.price}</span>
+                  </div>
+                  <div class="item-desc">${item.desc}</div>
+                  <button class="btn-order-dish" onclick="orderDishFromMenu('${item.name.replace(/'/g, "\\'")}')">
+                    <i data-lucide="plus-circle" style="width: 12px; height: 12px;"></i>
+                    Order This Dish (15 mins)
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+
+            <div style="font-size: 11px; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+              💡 <em>Tip: You can ask Sophia to expedite or customize your order (e.g. "Can you make it within 5 minutes?") anytime!</em>
+            </div>
+          </div>
+        `;
+      } else if (widget.type === "service_ticket") {
+        const isRush = widget.is_rush;
+        return `
+          <div class="service-ticket-widget ${isRush ? 'rush' : ''}" id="ticket-${widget.request_id}">
+            <div class="ticket-header">
+              <div class="ticket-title">
+                <i data-lucide="${isRush ? 'zap' : 'check-circle'}" style="width: 16px; height: 16px; color: ${isRush ? '#f59e0b' : 'var(--cyan)'};"></i>
+                Ticket #${widget.request_id} • Room ${widget.room_number}
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                ${isRush ? '<span class="status-badge reserved" style="color: #f59e0b; border: 1px solid rgba(245,158,11,0.5);">⚡ PRIORITY EXPRESS</span>' : ''}
+                <span class="status-badge cleaning" id="timer-badge-${widget.request_id}">ETA ~${widget.eta_minutes} Mins</span>
+              </div>
+            </div>
+            <div style="font-size: 13px; color: #fff; font-weight: 600;">${widget.service_type}</div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-top: 3px; line-height: 1.4;">${widget.details}</div>
+
+            <div class="progress-track">
+              <div class="progress-fill ${isRush ? 'rush-fill' : ''}" style="width: ${isRush ? '75%' : '40%'};"></div>
+            </div>
+            <div class="ticket-steps">
+              <span class="ticket-step active">Received</span>
+              <span class="ticket-step active">${isRush ? 'Express Prep' : 'In Kitchen'}</span>
+              <span class="ticket-step ${isRush ? 'active' : ''}">Runner Leo En Route</span>
+              <span class="ticket-step">Delivered</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 11px; color: var(--gold); display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="chef-hat" style="width: 13px; height: 13px;"></i>
+                Assigned: <strong>${widget.assigned_to}</strong>
+              </div>
+
+              ${!isRush ? `
+                <button class="btn-rush-order" onclick="sendQuickPrompt('Is it possible to make it a bit earlier like within 5 minutes?')">
+                  <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+                  Rush to 5 Mins
+                </button>
+              ` : `
+                <span style="font-size: 11px; color: #34d399; font-weight: 700;">⚡ Expedited</span>
+              `}
+            </div>
+          </div>
+        `;
+      } else if (widget.type === "booking_confirmation") {
+        return `
+          <div class="service-card" style="border-color: rgba(212, 175, 55, 0.4); background: rgba(22, 30, 48, 0.9);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-weight: 700; color: var(--gold); font-size: 14px;">Reservation Confirmed: #${widget.booking_id}</div>
+              <span class="status-badge reserved">Guaranteed</span>
+            </div>
+            <div style="font-size: 14px; font-weight: 600; color: #fff; margin-top: 4px;">${widget.room_name} • Room ${widget.room_number}</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Guest: ${widget.guest_name} • ${widget.nights} Nights (${widget.checkin_date} to ${widget.checkout_date})</div>
+            <div style="font-size: 13px; font-weight: 700; color: #34d399; margin-top: 4px;">Total Cost: $${widget.total_price}</div>
+            <button class="btn-action primary" style="margin-top: 8px; justify-content: center;" onclick="sendQuickPrompt('Check in ${widget.guest_name}')">
+              Instant Check-In & Get Digital Keycard
+            </button>
+          </div>
+        `;
+      }
+      return "";
+    }
+
+    function orderDishFromMenu(dishName) {
+      sendQuickPrompt("Please order the " + dishName + " to my room");
+    }
+
+    function unlockDoorSimulation(roomNumber) {
+      playDoorUnlockSound();
+      alert(`🔑 Digital NFC Key Authenticated!\n\nRoom ${roomNumber} door lock opened. Welcome to your luxury suite!`);
+    }
+
+    function showTypingIndicator() {
+      const container = document.getElementById("chat-history");
+      const indicator = document.createElement("div");
+      indicator.className = "msg-row assistant";
+      indicator.id = "typing-row";
+      indicator.innerHTML = `
+        <div class="msg-sender">Sophia is processing PMS...</div>
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      `;
+      container.appendChild(indicator);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+      const el = document.getElementById("typing-row");
+      if (el) el.remove();
+    }
+
+    function setAvatarState(state) {
+      const frame = document.getElementById("avatar-frame");
+      const wave = document.getElementById("wave-vis");
+      const label = document.getElementById("agent-status-label");
+
+      if (state === "speaking") {
+        frame.classList.add("speaking");
+        frame.classList.remove("listening");
+        wave.classList.add("active");
+        label.innerHTML = `<i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Speaking response`;
+      } else if (state === "listening") {
+        frame.classList.add("listening");
+        frame.classList.remove("speaking");
+        wave.classList.remove("active");
+        label.innerHTML = `<i data-lucide="mic" style="width: 14px; height: 14px; color: var(--rose);"></i> Listening to guest...`;
+      } else if (state === "thinking") {
+        frame.classList.remove("speaking", "listening");
+        wave.classList.add("active");
+        label.innerHTML = `<i data-lucide="loader-2" style="width: 14px; height: 14px;"></i> Updating hotel PMS...`;
+      } else {
+        frame.classList.remove("speaking", "listening");
+        wave.classList.remove("active");
+        label.innerHTML = `<i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Ready to assist guests`;
+      }
+      lucide.createIcons();
+    }
+
+    // Voice Synthesis
+    function speakResponse(text) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+
+      // Clean markdown tags for clean vocal output
+      const clean = text.replace(/[*#•`_]/g, "").replace(/\(.*?\)/g, "").trim();
+      const utterance = new SpeechSynthesisUtterance(clean);
+      utterance.rate = 1.02;
+      utterance.pitch = 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v => v.lang.startsWith("en") && (v.name.includes("Female") || v.name.includes("Samantha") || v.name.includes("Google") || v.name.includes("Natural")));
+      if (preferred) utterance.voice = preferred;
+
+      setAvatarState("speaking");
+
+      utterance.onend = () => {
+        setAvatarState("idle");
+        if (isHandsFree && !autopilotRunning) {
+          startListening();
+        }
+      };
+      utterance.onerror = () => {
+        setAvatarState("idle");
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Voice Recognition
+    function toggleSpeech() {
+      if (isListening) {
+        stopListening();
+      } else {
+        startListening();
+      }
+    }
+
+    function startListening() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = document.getElementById("lang-select").value === "es" ? "es-ES" : "en-US";
+
+      recognition.onstart = () => {
+        isListening = true;
+        document.getElementById("mic-btn").classList.add("listening");
+        setAvatarState("listening");
+        document.getElementById("chat-input").placeholder = "Listening... Speak your request now!";
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("chat-input").value = transcript;
+        stopListening();
+        handleUserSend();
+      };
+
+      recognition.onerror = () => {
+        stopListening();
+      };
+
+      recognition.onend = () => {
+        stopListening();
+      };
+
+      recognition.start();
+    }
+
+    function stopListening() {
+      isListening = false;
+      const btn = document.getElementById("mic-btn");
+      if (btn) btn.classList.remove("listening");
+      setAvatarState("idle");
+      document.getElementById("chat-input").placeholder = "Speak or type your request...";
+      if (recognition) {
+        try { recognition.abort(); } catch (e) { }
+        recognition = null;
+      }
+    }
+
+    function toggleHandsFree() {
+      isHandsFree = document.getElementById("handsfree-toggle").checked;
+      if (isHandsFree) {
+        document.getElementById("tts-toggle").checked = true;
+        addAssistantMessage("🎙️ <strong>Hands-Free Kiosk Mode Activated.</strong> Sophia will speak all replies and listen automatically for incoming guests.");
+        startListening();
+      } else {
+        stopListening();
+      }
+    }
+
+    // Multi-Language Switching
+    function changeLanguage() {
+      const lang = document.getElementById("lang-select").value;
+      const greetings = {
+        en: "Welcome to Royal Grand Inn! I am Sophia, your autonomous AI Front Desk receptionist. How may I assist you today?",
+        es: "¡Bienvenido al Royal Grand Inn! Soy Sophia, su recepcionista virtual autónoma. ¿En qué puedo asistirle hoy?",
+        fr: "Bienvenue au Royal Grand Inn ! Je suis Sophia, votre réceptionniste IA autonome. Comment puis-je vous aider aujourd'hui ?",
+        de: "Herzlich willkommen im Royal Grand Inn! Ich bin Sophia, Ihre autonome KI-Rezeptionistin. Wie kann ich Ihnen heute helfen?"
+      };
+      addAssistantMessage(greetings[lang] || greetings.en);
+      if (document.getElementById("tts-toggle").checked) {
+        speakResponse(greetings[lang] || greetings.en);
+      }
+    }
+
+    // Autonomous Hotel Simulator Tick
+    async function runAutopilotTick() {
+      try {
+        const res = await fetch("/autopilot/tick", { method: "POST" });
+        const data = await res.json();
+        updatePmsUI(data);
+        if (data.cleaned_room) {
+          setTicker(`Housekeeping completed sanitization of Room ${data.cleaned_room}. Status: Available.`);
+        }
+      } catch (e) { }
+    }
+
+    // AUTOPILOT TOUR: Proves the receptionist operates completely by itself!
+    async function startAutopilotTour() {
+      if (autopilotRunning) return;
+      autopilotRunning = true;
+      const btn = document.getElementById("btn-autopilot");
+      btn.innerHTML = `<i data-lucide="loader-2" style="width: 16px; height: 16px;"></i><span>Simulation Running...</span>`;
+      btn.style.opacity = "0.7";
+      lucide.createIcons();
+
+      const delay = ms => new Promise(r => setTimeout(r, ms));
+
+      addAssistantMessage("🎬 <strong>Starting Autonomous Receptionist Simulation.</strong><br>Watch Sophia manage guest arrivals, service tickets, and express checkout completely unattended.");
+
+      await delay(2500);
+
+      // Step 1: Guest 1 Arrival & Check-In
+      setTicker("Simulating Guest Arrival: David Miller approaches front desk...");
+      addUserMessage("Hi, I have a reservation under David Miller.");
+      await delay(1500);
+
+      const r1 = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: "Check in David Miller", history: [] })
+      }).then(r => r.json());
+
+      addAssistantMessage(r1.answer, r1.widget);
+      updatePmsUI(r1);
+      if (document.getElementById("tts-toggle").checked) speakResponse(r1.answer);
+      playHotelChime();
+
+      await delay(5000);
+
+      // Step 2: Guest in Room 301 orders service
+      setTicker("Simulating In-Stay Service Request from Room 301...");
+      addUserMessage("Can we get 2 extra plush towels and lavender bath salts sent to Room 301?");
+      await delay(1500);
+
+      const r2 = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: "Please send extra towels to Room 301", history: [] })
+      }).then(r => r.json());
+
+      addAssistantMessage(r2.answer, r2.widget);
+      updatePmsUI(r2);
+      if (document.getElementById("tts-toggle").checked) speakResponse(r2.answer);
+      playHotelChime();
+
+      await delay(5000);
+
+      // Step 3: Guest in Room 204 expresses checkout
+      setTicker("Simulating Express Check-Out for Room 204 (Elena Rostova)...");
+      addUserMessage("I am ready to check out of Room 204. Please settle my bill.");
+      await delay(1500);
+
+      const r3 = await fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: "Check out Room 204", history: [] })
+      }).then(r => r.json());
+
+      addAssistantMessage(r3.answer, r3.widget);
+      updatePmsUI(r3);
+      if (document.getElementById("tts-toggle").checked) speakResponse(r3.answer);
+      playHotelChime();
+
+      await delay(3500);
+
+      addAssistantMessage("✨ <strong>Autonomous Autopilot Demo Finished.</strong><br>Sophia successfully executed check-in, keycard generation, service ticket dispatching, folio settlement, and room turnover with zero human staff!");
+      setTicker("Autonomous simulation concluded with 100% operational accuracy.");
+
+      autopilotRunning = false;
+      btn.innerHTML = `<i data-lucide="sparkles" style="width: 16px; height: 16px;"></i><span>Run Autopilot Demo</span>`;
+      btn.style.opacity = "1";
+      lucide.createIcons();
+    }
+
+    // Utility text formatters
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    function formatMarkdown(text) {
+      if (!text) return "";
+      let html = escapeHtml(text);
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      html = html.replace(/•\s*(.*?)(?=\n|$)/g, '<li style="margin-left: 18px; margin-top: 4px;">$1</li>');
+      html = html.replace(/\n\n/g, '<br><br>');
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+  </script>
+</body>
+
+</html>

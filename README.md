@@ -2,6 +2,8 @@
 
 An end-to-end, fully autonomous AI Front Desk Receptionist and Hotel Property Management System (PMS) designed to operate 100% unattended 24/7. Powered by **Sophia**, a digital front-desk agent capable of handling guest check-ins, walk-in reservations, in-stay housekeeping & dining requests, express check-out with itemized folio billing, and real-time room rack management.
 
+---
+
 ## 🌟 Key Features
 
 ### 1. 100% Autonomous Operation
@@ -25,8 +27,9 @@ An end-to-end, fully autonomous AI Front Desk Receptionist and Hotel Property Ma
 - **Autonomous Background Simulator**: Background PMS tick automatically completes room turnovers and advances service ticket states.
 - **Live Hotel KPIs**: Real-time Occupancy Percentage gauge, In-House Guest count, Pending Tickets, and Total Revenue.
 
+---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.10+
@@ -62,6 +65,8 @@ An end-to-end, fully autonomous AI Front Desk Receptionist and Hotel Property Ma
 5. **Access the Web Kiosk**:
    Open [http://localhost:5000](http://localhost:5000) in your browser.
 
+---
+
 ## 📡 API Endpoints
 
 | Method | Endpoint | Description |
@@ -75,8 +80,11 @@ An end-to-end, fully autonomous AI Front Desk Receptionist and Hotel Property Ma
 | `POST` | `/autopilot/tick` | Background automation tick advancing tickets and room cleaning. |
 | `POST` | `/reset` | Restores PMS database to the default sample luxury hotel state. |
 
+---
+
 ## 🏗️ Architecture
 
+```
 ai-hotel-receptionist/
 ├── app.py                   # Autonomous Flask PMS & AI Receptionist Server
 ├── index.html               # Luxury Kiosk Front Desk & Real-Time PMS Interface

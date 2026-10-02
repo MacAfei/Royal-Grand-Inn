@@ -1,0 +1,111 @@
+{
+  "hotel_info": {
+    "name": "Royal Grand Inn",
+    "address": "123 Ocean Drive, Miami Beach, FL 33139",
+    "phone": "+1 (555) 123-4567",
+    "email": "reception@royalgrandinn.com",
+    "check_in_time": "2:00 PM",
+    "check_out_time": "11:00 AM",
+    "cancellation_policy": "Free cancellation up to 24 hours before check-in. Late cancellations or no-shows will be charged for the first night."
+  },
+  "room_types": [
+    {
+      "id": "deluxe",
+      "name": "Deluxe Room",
+      "price_per_night": 150,
+      "capacity": 2,
+      "features": ["1 King Bed", "Ocean View Balcony", "Free Wi-Fi", "Mini Bar", "Smart TV", "Coffee Maker"],
+      "description": "A spacious and elegant room featuring a private balcony with breathtaking views of the ocean. Perfect for couples or solo travelers."
+    },
+    {
+      "id": "suite",
+      "name": "Executive Suite",
+      "price_per_night": 280,
+      "capacity": 4,
+      "features": ["1 King Bed + 1 Sofa Bed", "Separate Living Area", "Kitchenette", "Ocean View Balcony", "Free Wi-Fi", "Bathtub", "Smart TV"],
+      "description": "An upscale suite offering separate living and sleeping areas, ideal for business travelers or small families looking for extra comfort."
+    },
+    {
+      "id": "penthouse",
+      "name": "Presidential Penthouse",
+      "price_per_night": 600,
+      "capacity": 6,
+      "features": ["3 Bedrooms (Kings)", "Private Rooftop Pool", "Personal Butler Service", "Full Kitchen", "Panoramic Ocean Views", "Free Wi-Fi", "Jacuzzi"],
+      "description": "The ultimate luxury experience. A massive penthouse occupies the top floor, featuring a private rooftop pool and elite personalized services."
+    }
+  ],
+  "amenities": [
+    {
+      "name": "Infinity Pool",
+      "location": "3rd Floor Terrace",
+      "hours": "7:00 AM - 10:00 PM",
+      "details": "Heated outdoor infinity pool overlooking the ocean. Towels are provided at the pool deck."
+    },
+    {
+      "name": "Grand Spa & Wellness",
+      "location": "2nd Floor",
+      "hours": "9:00 AM - 8:00 PM",
+      "details": "Full-service spa offering massages, facials, saunas, and steam rooms. Reservations are highly recommended."
+    },
+    {
+      "name": "Fitness Center",
+      "location": "Basement Level 1",
+      "hours": "Open 24/7",
+      "details": "Equipped with modern cardio machines, free weights, and yoga mats. Accessible with room key."
+    },
+    {
+      "name": "Rooftop Lounge (The Horizon)",
+      "location": "15th Floor (Rooftop)",
+      "hours": "5:00 PM - 1:00 AM",
+      "details": "Cocktail bar and lounge offering fine dining and panoramic sunset views. Smart casual dress code."
+    }
+  ],
+  "dining": {
+    "restaurant": "Ocean Breeze Grill (Lobby Level)",
+    "hours": {
+      "breakfast": "6:30 AM - 10:30 AM",
+      "lunch": "12:00 PM - 3:00 PM",
+      "dinner": "6:00 PM - 10:00 PM"
+    },
+    "room_service": "Available 24/7. Dial 4 from your room phone to order or order directly through Sophia AI Concierge. A 15% service charge applies.",
+    "room_service_menu": {
+      "breakfast": [
+        { "id": "bf-1", "name": "Royal Continental Breakfast", "price": 24, "desc": "Artisanal croissants, Danish pastries, seasonal berries, Greek yogurt, honey, fresh orange juice", "icon": "croissant" },
+        { "id": "bf-2", "name": "Classic Eggs Benedict & Smoked Salmon", "price": 28, "desc": "Poached organic eggs, Norwegian salmon, butter brioche, hollandaise, herb-roasted potatoes", "icon": "egg" },
+        { "id": "bf-3", "name": "Belgian Golden Waffles", "price": 19, "desc": "Crispy Belgian waffles, vanilla whipped cream, fresh strawberries, pure Vermont maple syrup", "icon": "utensils" },
+        { "id": "bf-4", "name": "South Beach Acai Wellness Bowl", "price": 18, "desc": "Organic acai, chia seeds, sliced bananas, dragonfruit, toasted coconut, almond butter", "icon": "apple" },
+        { "id": "bf-5", "name": "Fresh Florida Orange Juice", "price": 8, "desc": "Freshly squeezed Florida Valencia oranges", "icon": "cup-soda" },
+        { "id": "bf-6", "name": "Artisan Cappuccino / Espresso", "price": 7, "desc": "Double shot Illy espresso with velvety microfoam milk", "icon": "coffee" }
+      ],
+      "all_day": [
+        { "id": "ad-1", "name": "Ocean Breeze Prime Wagyu Burger", "price": 28, "desc": "8oz Wagyu beef, aged cheddar, truffle aioli, brioche bun, crisp parmesan fries", "icon": "beef" },
+        { "id": "ad-2", "name": "Pan-Seared Atlantic Salmon", "price": 36, "desc": "Wild salmon, asparagus spears, saffron risotto, champagne citrus beurre blanc", "icon": "fish" },
+        { "id": "ad-3", "name": "Grilled USDA Prime Ribeye (12oz)", "price": 52, "desc": "Rosemary garlic butter, grilled broccolini, whipped Yukon gold potatoes", "icon": "flame" },
+        { "id": "ad-4", "name": "Black Truffle Tagliatelle", "price": 30, "desc": "Fresh egg pasta, black truffles, wild forest mushrooms, 24-month aged Parmigiano", "icon": "wheat" },
+        { "id": "ad-5", "name": "Authentic Key Lime Tart", "price": 14, "desc": "Florida key lime custard, graham cracker crust, toasted Italian meringue", "icon": "pie-chart" }
+      ]
+    }
+  },
+  "faq": [
+    {
+      "question": "Is there free Wi-Fi?",
+      "answer": "Yes, we provide free high-speed Wi-Fi throughout the entire hotel. Connect to 'Royal_Grand_Free_WiFi' - no password required."
+    },
+    {
+      "question": "Do you offer parking?",
+      "answer": "Yes, we offer valet parking for $30 per night with unlimited in/out privileges. Self-parking is not available."
+    },
+    {
+      "question": "Are pets allowed?",
+      "answer": "Yes, we are a pet-friendly hotel! Dogs and cats under 25 lbs are welcome. A non-refundable pet cleaning fee of $50 per stay applies. Maximum 2 pets per room."
+    },
+    {
+      "question": "Do you have a shuttle service?",
+      "answer": "We offer a complimentary shuttle service to and from Miami International Airport (MIA) every hour on the hour between 6:00 AM and 10:00 PM. Please book at least 2 hours in advance at the reception desk."
+    },
+    {
+      "question": "Can I request a late check-out?",
+      "answer": "Standard check-out is 11:00 AM. Late check-out up to 1:00 PM is complimentary subject to availability. Check-out until 4:00 PM is available for a fee of 50% of the room rate."
+    }
+  ]
+}
