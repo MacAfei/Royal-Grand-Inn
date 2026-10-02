@@ -1,0 +1,110 @@
+[
+  {
+    "room_number": "201",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "reserved",
+    "current_guest": "Sarah",
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "202",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "occupied",
+    "current_guest": "David Miller",
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "203",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "204",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "205",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "206",
+    "room_type": "deluxe",
+    "name": "Deluxe Ocean Balcony",
+    "floor": 2,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "301",
+    "room_type": "suite",
+    "name": "Executive Corner Suite",
+    "floor": 3,
+    "status": "occupied",
+    "current_guest": "Sarah Jenkins",
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "302",
+    "room_type": "suite",
+    "name": "Executive Corner Suite",
+    "floor": 3,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "303",
+    "room_type": "suite",
+    "name": "Executive Corner Suite",
+    "floor": 3,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "304",
+    "room_type": "suite",
+    "name": "Executive Corner Suite",
+    "floor": 3,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "1501",
+    "room_type": "penthouse",
+    "name": "Presidential Ocean Penthouse",
+    "floor": 15,
+    "status": "occupied",
+    "current_guest": "Carlos Mendez",
+    "cleanliness": "clean"
+  },
+  {
+    "room_number": "1502",
+    "room_type": "penthouse",
+    "name": "Presidential Sky Penthouse",
+    "floor": 15,
+    "status": "available",
+    "current_guest": null,
+    "cleanliness": "clean"
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "request_id": "SR-BD38",
+    "room_number": "301",
+    "guest_name": "Sarah Jenkins",
+    "service_type": "In-Room Dining",
+    "details": "Belgian Golden Waffles ($19)",
+    "status": "Priority Express",
+    "assigned_to": "Chef Marco (Priority Express)",
+    "eta_minutes": 5,
+    "priority": "Express Rush",
+    "timestamp": "2026-09-27 10:29"
+  },
+  {
+    "request_id": "SR-9C25",
+    "room_number": "202",
+    "guest_name": "David Miller",
+    "service_type": "In-Room Dining",
+    "details": "Classic Eggs Benedict & Smoked Salmon ($28), Pan-Seared Atlantic Salmon ($36)",
+    "status": "Priority Express",
+    "assigned_to": "Chef Marco (Priority Express)",
+    "eta_minutes": 5,
+    "priority": "Express Rush",
+    "timestamp": "2026-09-27 10:05"
+  },
+  {
+    "request_id": "SR-EE98",
+    "room_number": "202",
+    "guest_name": "David Miller",
+    "service_type": "In-Room Dining",
+    "details": "Classic Eggs Benedict & Smoked Salmon ($28), Fresh Florida Orange Juice ($8)",
+    "status": "Priority Express",
+    "assigned_to": "Chef Marco (Priority Express)",
+    "eta_minutes": 5,
+    "priority": "Express Rush",
+    "timestamp": "2026-09-27 09:45"
+  },
+  {
+    "request_id": "SR-38E3",
+    "room_number": "202",
+    "guest_name": "David Miller",
+    "service_type": "In-Room Dining",
+    "details": "Classic Eggs Benedict & Smoked Salmon ($28), Fresh Florida Orange Juice ($8)",
+    "status": "Priority Express",
+    "assigned_to": "Chef Marco (Priority Express)",
+    "eta_minutes": 5,
+    "priority": "Express Rush",
+    "timestamp": "2026-09-27 09:45"
+  },
+  {
+    "request_id": "SR-F405",
+    "room_number": "202",
+    "guest_name": "David Miller",
+    "service_type": "Room Service",
+    "details": "I have some other things to do so is it possible for you guys to provide the breakfast within 5 minutes",
+    "status": "Completed",
+    "assigned_to": "Dining Runner Leo",
+    "eta_minutes": 15,
+    "timestamp": "2026-09-27 09:38",
+    "completed_at": "09:39"
+  },
+  {
+    "request_id": "SR-C895",
+    "room_number": "202",
+    "guest_name": "David Miller",
+    "service_type": "Room Service",
+    "details": "hi do you guys provide breakfast because I have a bit of flight Jalandhar or something",
+    "status": "Completed",
+    "assigned_to": "Dining Runner Leo",
+    "eta_minutes": 15,
+    "timestamp": "2026-09-27 09:37",
+    "completed_at": "09:38"
+  },
+  {
+    "request_id": "SR-111B",
+    "room_number": "204",
+    "guest_name": "Guest",
+    "service_type": "Room Service",
+    "details": "hi what is for breakfast I was being a bit of hungry I am feeling a bit of hungry so what is your for breakfast",
+    "status": "Completed",
+    "assigned_to": "Dining Runner Leo",
+    "eta_minutes": 15,
+    "timestamp": "2026-09-27 09:36",
+    "completed_at": "09:36"
+  },
+  {
+    "request_id": "SR-E137",
+    "room_number": "301",
+    "guest_name": "Sarah Jenkins",
+    "service_type": "Extra Towels & Amenities",
+    "details": "Please send extra towels to Room 301",
+    "status": "Completed",
+    "assigned_to": "Housekeeping Bot Alpha",
+    "eta_minutes": 5,
+    "timestamp": "2026-09-27 09:32",
+    "completed_at": "09:32"
+  },
+  {
+    "request_id": "SR-4109",
+    "room_number": "301",
+    "guest_name": "Sarah Jenkins",
+    "service_type": "Extra Towels",
+    "details": "2 fluffy bath towels and extra lavender shampoo",
+    "status": "Completed",
+    "assigned_to": "Housekeeper Maria (Bot Dispatch)",
+    "eta_minutes": 3,
+    "timestamp": "2026-09-27 09:10",
+    "completed_at": "09:29"
+  },
+  {
+    "request_id": "SR-8821",
+    "room_number": "1501",
+    "guest_name": "Carlos Mendez",
+    "service_type": "Room Service",
+    "details": "Champagne & fresh fruit platter to rooftop jacuzzi",
+    "status": "Completed",
+    "assigned_to": "Dining Runner Leo",
+    "eta_minutes": 8,
+    "timestamp": "2026-09-27 09:12",
+    "completed_at": "09:30"
+  }
+]
